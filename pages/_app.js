@@ -1,12 +1,14 @@
-import "@/styles/globals.css";
+import "@/styles/globals.css"
 
-import { ThemeProvider } from "@/components/layouts/ThemeProvider";
-import { CookiesProvider } from "react-cookie";
-import Head from "next/head";
-import { usePathname } from "next/navigation";
-import { DefaultLayout } from "@/components/layouts/DefaultLayout";
-import { AdminLayout } from "@/components/layouts/AdminLayout";
+import { ThemeProvider } from "@/components/layouts/ThemeProvider"
+import { CookiesProvider } from "react-cookie"
+import Head from "next/head"
+import { usePathname } from "next/navigation"
+import { DefaultLayout } from "@/components/layouts/DefaultLayout"
+import { AdminLayout } from "@/components/layouts/AdminLayout"
 import { Geist, Roboto } from 'next/font/google'
+import { StudentLayout } from "@/components/layouts/StudentLayout"
+import { ToastContainer } from "react-toastify"
 
 const roboto = Geist({
   weight: '400',
@@ -18,6 +20,9 @@ export default function App({ Component, pageProps }) {
 
   return (
     <>
+      <Head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+      </Head>
       <CookiesProvider defaultSetOptions={{ path: '/' }}>
         <ThemeProvider
           attribute="class"
@@ -29,17 +34,22 @@ export default function App({ Component, pageProps }) {
           </Head>
 
           <main className={roboto.className}>
-            {/* <DefaultLayout>
+            {!pathName.startsWith("/student") && !pathName.startsWith("/admin") && <DefaultLayout>
               <Component {...pageProps} />
-            </DefaultLayout> */}
+            </DefaultLayout>}
 
-            <AdminLayout>
+            {pathName.startsWith("/student") && <StudentLayout>
               <Component {...pageProps} />
-            </AdminLayout>
+            </StudentLayout>}
+
+            {pathName.startsWith("/admin") && <AdminLayout>
+              <Component {...pageProps} />
+            </AdminLayout>}
           </main>
 
+          <ToastContainer />
         </ThemeProvider>
       </CookiesProvider>
     </>
-  );
+  )
 }
